@@ -4,8 +4,10 @@
   "description": "This is the api made with express, mongoDB and typescript for creating an Online Contract Management System",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon"
-  },
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon"
+  },  
   "keywords": [
     "Contract",
     "contract-management-system",
