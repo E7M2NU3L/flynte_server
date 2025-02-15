@@ -1,8 +1,6 @@
 import http from "http";
 import express from 'express';
 import cors from 'cors';
-import compression from 'compression';
-import cookieSession from 'cookie-session'
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
@@ -36,11 +34,6 @@ dbConnect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cookieSession({
-    name: 'google-auth-session',
-    keys: ['xcontour'],
-    maxAge : 24 * 60 * 60 * 100
-}));
 app.use(session({
     secret: process.env.SESSION_SECRET as string,
     resave: false,
