@@ -47,8 +47,9 @@ app.use(session({
     saveUninitialized: false,
     name : "user",
     cookie: {
-        secure: false,
+        secure: true,
         httpOnly: true,
+        sameSite: "none", // Required for cross-origin cookies
         maxAge: 1000 * 60 * 60 * 3,
     }
   }));
@@ -60,6 +61,8 @@ app.use(cors({
     methods : "GET,POST,PUT,DELETE,PATCH"
 }));
 app.use(morgan('combined'));
+
+app.set('trust proxy', 1);
 
 // server
 const server = http.createServer(app);
