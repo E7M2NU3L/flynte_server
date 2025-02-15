@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const cookie_session_1 = __importDefault(require("cookie-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -35,19 +34,15 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
-app.use((0, cookie_session_1.default)({
-    name: 'google-auth-session',
-    keys: ['xcontour'],
-    maxAge: 24 * 60 * 60 * 100
-}));
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     name: "user",
     cookie: {
-        secure: false,
+        secure: true,
         httpOnly: true,
+        sameSite: "none", // Required for cross-origin cookies
         maxAge: 1000 * 60 * 60 * 3,
     }
 }));
@@ -59,6 +54,7 @@ app.use((0, cors_1.default)({
     methods: "GET,POST,PUT,DELETE,PATCH"
 }));
 app.use((0, morgan_1.default)('combined'));
+app.set('trust proxy', 1);
 // server
 const server = http_1.default.createServer(app);
 // routes // /api/v1/contracts/delete/${id}
