@@ -9,7 +9,8 @@ export const createMember = async (req: Request, res: Response, next: NextFuncti
     try {
         // Extract token from cookies or headers
         const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-            
+        console.log(token);
+
         // If no token found, log out gracefully
         if (!token) {
             return res.status(200).json({
@@ -22,17 +23,12 @@ export const createMember = async (req: Request, res: Response, next: NextFuncti
         try {
             decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
         } catch (error) {
-            // Invalid token, clear cookies as a fallback
-            res.clearCookie("token");
-            req.logOut(function(err) {
-                if (err) {
-                    console.log(err);
-                }
-            });
             return res.status(200).json({
                 message: "User logged out (invalid token).",
             });
-        }
+        };
+
+        console.log(decodedToken);
 
         const validatedData = await CreateMemberSchema.safeParseAsync(req.body);
         if (!validatedData.success) {
@@ -47,19 +43,30 @@ export const createMember = async (req: Request, res: Response, next: NextFuncti
             ...validatedData.data,
             user: decodedToken.id
         }
-        const member = await Members.create(payload);
+        console.log(payload);
+        const member = new Members(payload);
+        await member.save();
+
+        console.log(member);
+
         if (!member) {
             res.status(301).json({
                 status : "Failed",
                 message : "Member not created, Unique data must be given",
             })
         }
+
         return res.status(201).json({
             status: "success",
             data: member
         });
     } catch (error) {
-        return next(AppErr("Failed to create member", 400));
+        if (error instanceof Error) {
+            return next(AppErr(error.message, 400));
+        }
+        else {
+            return next(AppErr("Failed to create member", 400));
+        }
     }
 };
 

@@ -50,7 +50,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors({
     credentials : true,
-    origin : "https://flynte.vercel.app",
+    origin : process.env.CLIENT_ENDPOINT ?? "http://localhost:5173",
     methods : "GET,POST,PUT,DELETE,PATCH"
 }));
 app.use(morgan('combined'));
