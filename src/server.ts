@@ -52,7 +52,7 @@ app.use(cors({
     credentials : true,
     origin : process.env.CLIENT_ENDPOINT ?? "http://localhost:5173",
     methods : "GET,POST,PUT,DELETE,PATCH",
-    allowedHeaders : "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+    allowedHeaders : "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Set-Cookie"
 }));
 app.use(morgan('combined'));
 
