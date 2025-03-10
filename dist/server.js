@@ -37,13 +37,13 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Change this to true if sessions are not being saved
     name: "user",
     cookie: {
-        secure: true,
+        secure: process.env.NODE_ENV === "production", // Secure only in production
         httpOnly: true,
-        sameSite: "none", // Required for cross-origin cookies
-        maxAge: 1000 * 60 * 60 * 3,
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60 * 3, // 3 hours
     }
 }));
 app.use(passport_1.default.initialize());
@@ -51,13 +51,21 @@ app.use(passport_1.default.session());
 app.use((0, cors_1.default)({
     credentials: true,
     origin: process.env.CLIENT_ENDPOINT ?? "http://localhost:5173",
-    methods: "GET,POST,PUT,DELETE,PATCH"
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    allowedHeaders: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Set-Cookie"
 }));
 app.use((0, morgan_1.default)('combined'));
 app.set('trust proxy', 1);
 // server
 const server = http_1.default.createServer(app);
 // routes // /api/v1/contracts/delete/${id}
+app.get("/", async (req, res, next) => {
+    const cookies = req.cookies;
+    res.status(200).json({
+        message: "Welcome to Flynte Finance API",
+        cookies: cookies,
+    });
+});
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/overview", overview_1.OverviewRouter);
 app.use("/api/v1/member", member_1.default);
