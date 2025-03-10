@@ -7,8 +7,8 @@ exports.Members = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const MemberProfileSchema = new mongoose_1.default.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: false, unique: true },
-    phone: { type: String, required: true, unique: true },
+    email: { type: String, required: false },
+    phone: { type: String, required: true },
     role: { type: String, enum: ['Parent', 'Child', 'Guardian'], required: true },
     profileImage: { type: String, required: false },
     gender: { type: String, enum: ['Male', 'Female', 'Non-binary'], required: true },

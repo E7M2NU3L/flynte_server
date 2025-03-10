@@ -13,6 +13,7 @@ const createMember = async (req, res, next) => {
     try {
         // Extract token from cookies or headers
         const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        console.log(token);
         // If no token found, log out gracefully
         if (!token) {
             return res.status(200).json({
@@ -25,17 +26,12 @@ const createMember = async (req, res, next) => {
             decodedToken = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         }
         catch (error) {
-            // Invalid token, clear cookies as a fallback
-            res.clearCookie("token");
-            req.logOut(function (err) {
-                if (err) {
-                    console.log(err);
-                }
-            });
             return res.status(200).json({
                 message: "User logged out (invalid token).",
             });
         }
+        ;
+        console.log(decodedToken);
         const validatedData = await member_schemas_1.CreateMemberSchema.safeParseAsync(req.body);
         if (!validatedData.success) {
             res.status(404).json({
@@ -48,7 +44,10 @@ const createMember = async (req, res, next) => {
             ...validatedData.data,
             user: decodedToken.id
         };
-        const member = await member_1.Members.create(payload);
+        console.log(payload);
+        const member = new member_1.Members(payload);
+        await member.save();
+        console.log(member);
         if (!member) {
             res.status(301).json({
                 status: "Failed",
@@ -61,7 +60,12 @@ const createMember = async (req, res, next) => {
         });
     }
     catch (error) {
-        return next((0, app_err_1.AppErr)("Failed to create member", 400));
+        if (error instanceof Error) {
+            return next((0, app_err_1.AppErr)(error.message, 400));
+        }
+        else {
+            return next((0, app_err_1.AppErr)("Failed to create member", 400));
+        }
     }
 };
 exports.createMember = createMember;
