@@ -15,11 +15,12 @@ const date_fns_1 = require("date-fns"); // For date manipulation
 async function FetchAppOverview(req, res, next) {
     try {
         // Extract token from cookies or headers
-        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
         // If no token found, log out gracefully
         if (!token) {
             return res.status(200).json({
                 message: "User logged out successfully (no active session).",
+                token
             });
         }
         // Verify token
@@ -28,10 +29,9 @@ async function FetchAppOverview(req, res, next) {
             decodedToken = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         }
         catch (error) {
-            // Invalid token, clear cookies as a fallback
-            res.clearCookie("token");
             return res.status(200).json({
                 message: "User logged out successfully (invalid token).",
+                decodedToken
             });
         }
         const userId = decodedToken.id;

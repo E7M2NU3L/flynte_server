@@ -69,7 +69,7 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
 
 export const signOutController = async (req: Request, res: Response, next: NextFunction) => {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
         
     // If no token found, log out gracefully
@@ -141,7 +141,7 @@ export const refreshTokenController = async (req: Request, res: Response, next: 
 // verifyUser Send Otp Controller
 export const VerifyUserSendOtpController = async (req : Request, res : Response, next : NextFunction) => {
      // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
         
     // If no token found, log out gracefully
@@ -187,7 +187,7 @@ export const verifyEmailController = async (req: Request, res: Response, next: N
     if(otp !== parsedBody.otp) return next(AppErr('Invalid OTP', 400));
 
      // Extract token from cookies or headers
-     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
@@ -323,7 +323,7 @@ export const updateProfileController = async (req: Request, res: Response, next:
     const parsedBody = UpdateProfileSchema.parse(body);
 
      // Extract token from cookies or headers
-     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
@@ -355,7 +355,7 @@ export const updateProfileController = async (req: Request, res: Response, next:
 // Delete Profile Controller
 export const deleteProfileController = async (req: Request, res: Response, next: NextFunction) => {
      // Extract token from cookies or headers
-     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
@@ -391,7 +391,7 @@ export const uploadProfilePicController = async (req: Request, res: Response, ne
     const fileUrl = body?.fileUrl as string;
 
      // Extract token from cookies or headers
-     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
@@ -423,7 +423,7 @@ export const uploadProfilePicController = async (req: Request, res: Response, ne
 // Delete Profile Picture Controller
 export const deleteProfilePicController = async (req: Request, res: Response, next: NextFunction) => {
      // Extract token from cookies or headers
-     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully

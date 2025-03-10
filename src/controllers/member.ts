@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 export const createMember = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Extract token from cookies or headers
-        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
         console.log(token);
 
         // If no token found, log out gracefully
@@ -74,7 +74,7 @@ export const createMember = async (req: Request, res: Response, next: NextFuncti
 export const getAllMembers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Extract token from cookies or headers
-        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
             
         // If no token found, log out gracefully
         if (!token) {

@@ -68,7 +68,7 @@ const signUpController = async (req, res, next) => {
 exports.signUpController = signUpController;
 const signOutController = async (req, res, next) => {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -133,7 +133,7 @@ exports.refreshTokenController = refreshTokenController;
 // verifyUser Send Otp Controller
 const VerifyUserSendOtpController = async (req, res, next) => {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -173,7 +173,7 @@ const verifyEmailController = async (req, res, next) => {
     if (otp !== parsedBody.otp)
         return next((0, app_err_1.AppErr)('Invalid OTP', 400));
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -290,7 +290,7 @@ const updateProfileController = async (req, res, next) => {
     const body = req.body;
     const parsedBody = auth_schemas_1.UpdateProfileSchema.parse(body);
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -319,7 +319,7 @@ exports.updateProfileController = updateProfileController;
 // Delete Profile Controller
 const deleteProfileController = async (req, res, next) => {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -351,7 +351,7 @@ const uploadProfilePicController = async (req, res, next) => {
     const body = req.body;
     const fileUrl = body?.fileUrl;
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {
@@ -380,7 +380,7 @@ exports.uploadProfilePicController = uploadProfilePicController;
 // Delete Profile Picture Controller
 const deleteProfilePicController = async (req, res, next) => {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     console.log(token);
     // If no token found, log out gracefully
     if (!token) {

@@ -12,7 +12,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const createMember = async (req, res, next) => {
     try {
         // Extract token from cookies or headers
-        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
         console.log(token);
         // If no token found, log out gracefully
         if (!token) {
@@ -73,7 +73,7 @@ exports.createMember = createMember;
 const getAllMembers = async (req, res, next) => {
     try {
         // Extract token from cookies or headers
-        const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
         // If no token found, log out gracefully
         if (!token) {
             return res.status(200).json({

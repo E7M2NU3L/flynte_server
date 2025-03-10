@@ -11,12 +11,13 @@ import { startOfDay, endOfDay, startOfMonth, endOfMonth, startOfYear, endOfYear 
 export async function FetchAppOverview(req: Request, res: Response, next: NextFunction) {
   try {
     // Extract token from cookies or headers
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token : string = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
     
     // If no token found, log out gracefully
     if (!token) {
       return res.status(200).json({
         message: "User logged out successfully (no active session).",
+        token
       });
     }
 
@@ -25,10 +26,9 @@ export async function FetchAppOverview(req: Request, res: Response, next: NextFu
     try {
       decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
     } catch (error) {
-      // Invalid token, clear cookies as a fallback
-      res.clearCookie("token");
       return res.status(200).json({
         message: "User logged out successfully (invalid token).",
+        decodedToken
       });
     }
 
