@@ -51,7 +51,8 @@ app.use(passport.session());
 app.use(cors({
     credentials : true,
     origin : process.env.CLIENT_ENDPOINT ?? "http://localhost:5173",
-    methods : "GET,POST,PUT,DELETE,PATCH"
+    methods : "GET,POST,PUT,DELETE,PATCH",
+    allowedHeaders : "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
 }));
 app.use(morgan('combined'));
 
