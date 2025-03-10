@@ -148,6 +148,7 @@ export const VerifyUserSendOtpController = async (req : Request, res : Response,
     if (!token) {
         return res.status(200).json({
             message: "User logged out successfully (no active session).",
+            token
         });
     }
 
@@ -156,10 +157,9 @@ export const VerifyUserSendOtpController = async (req : Request, res : Response,
     try {
         decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
     } catch (error) {
-        // Invalid token, clear cookies as a fallback
-        res.clearCookie("token");
         return res.status(200).json({
             message: "User logged out successfully (invalid token).",
+            decodedToken
         });
     }
 
@@ -194,6 +194,7 @@ export const verifyEmailController = async (req: Request, res: Response, next: N
      if (!token) {
          return res.status(200).json({
              message: "User logged out successfully (no active session).",
+             token
          });
      }
  
@@ -202,10 +203,9 @@ export const verifyEmailController = async (req: Request, res: Response, next: N
      try {
          decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
      } catch (error) {
-         // Invalid token, clear cookies as a fallback
-         res.clearCookie("token");
          return res.status(200).json({
              message: "User logged out successfully (invalid token).",
+             decodedToken
          });
      }
 
@@ -299,14 +299,31 @@ export const verifyResetPasswordController = async (req: Request, res: Response,
 
 // Get Profile Controller
 export const getProfileController = async (req: Request, res: Response, next: NextFunction) => {
-    // Implementation for getting profile
-    const token = req.cookies['token'];
-    if(!token) return next(AppErr('Unauthorized', 401));
+    // Extract token from cookies or headers
+    const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
+    console.log(token);
+        
+    // If no token found, log out gracefully
+    if (!token) {
+        return res.status(200).json({
+            message: "User logged out successfully (no active session).",
+            token
+        });
+    }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
-    if(!decoded) return next(AppErr('Unauthorized', 401));
+    // Verify token
+    let decodedToken : any = null;
+    try {
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
+    } catch (error) {
+        return res.status(200).json({
+            message: "User logged out successfully (invalid token).",
+            decodedToken,
+            error : error
+        });
+    }
 
-    const user = await UserModel.findById(decoded?.id);
+    const user = await UserModel.findById(decodedToken?.id);
     if(!user) return next(AppErr('Unauthorized', 401));
 
     console.log(req.user);
@@ -330,6 +347,7 @@ export const updateProfileController = async (req: Request, res: Response, next:
      if (!token) {
          return res.status(200).json({
              message: "User logged out successfully (no active session).",
+             token
          });
      }
  
@@ -338,10 +356,9 @@ export const updateProfileController = async (req: Request, res: Response, next:
      try {
          decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
      } catch (error) {
-         // Invalid token, clear cookies as a fallback
-         res.clearCookie("token");
          return res.status(200).json({
              message: "User logged out successfully (invalid token).",
+             token
          });
      }
 
@@ -391,13 +408,14 @@ export const uploadProfilePicController = async (req: Request, res: Response, ne
     const fileUrl = body?.fileUrl as string;
 
      // Extract token from cookies or headers
-     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
+     const token : string = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
      if (!token) {
          return res.status(200).json({
              message: "User logged out successfully (no active session).",
+             token
          });
      }
  
@@ -406,10 +424,9 @@ export const uploadProfilePicController = async (req: Request, res: Response, ne
      try {
          decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
      } catch (error) {
-         // Invalid token, clear cookies as a fallback
-         res.clearCookie("token");
          return res.status(200).json({
              message: "User logged out successfully (invalid token).",
+             decodedToken
          });
      }
 
@@ -423,13 +440,14 @@ export const uploadProfilePicController = async (req: Request, res: Response, ne
 // Delete Profile Picture Controller
 export const deleteProfilePicController = async (req: Request, res: Response, next: NextFunction) => {
      // Extract token from cookies or headers
-     const token = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
+     const token : string = req.cookies['token'] || req.headers.authorization?.split(" ")[1];
      console.log(token);
          
      // If no token found, log out gracefully
      if (!token) {
          return res.status(200).json({
              message: "User logged out successfully (no active session).",
+             token
          });
      }
  
