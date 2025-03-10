@@ -305,7 +305,7 @@ export const getProfileController = async (req: Request, res: Response, next: Ne
         
     // If no token found, log out gracefully
     if (!token) {
-        return res.status(200).json({
+        return res.status(404).json({
             message: "User logged out successfully (no active session).",
             token
         });
@@ -445,7 +445,7 @@ export const deleteProfilePicController = async (req: Request, res: Response, ne
          
      // If no token found, log out gracefully
      if (!token) {
-         return res.status(200).json({
+         return res.status(301).json({
              message: "User logged out successfully (no active session).",
              token
          });
