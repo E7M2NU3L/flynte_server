@@ -1,5 +1,5 @@
 import http from "http";
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -37,15 +37,15 @@ app.use(cookieParser());
 app.use(session({
     secret: process.env.SESSION_SECRET as string,
     resave: false,
-    saveUninitialized: false,
-    name : "user",
+    saveUninitialized: true, // Change this to true if sessions are not being saved
+    name: "user",
     cookie: {
-        secure: true,
+        secure: process.env.NODE_ENV === "production", // Secure only in production
         httpOnly: true,
-        sameSite: "none", // Required for cross-origin cookies
-        maxAge: 1000 * 60 * 60 * 3,
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60 * 3, // 3 hours
     }
-  }));
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors({
@@ -62,6 +62,14 @@ app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 // routes // /api/v1/contracts/delete/${id}
+app.get("/", async (req : Request, res : Response, next : NextFunction) => {
+    const cookies = req.cookies;
+
+    res.status(200).json({
+        message: "Welcome to Flynte Finance API",
+        cookies: cookies,
+    });
+})
 app.use("/api/v1/auth", AuthRouter);
 app.use("/api/v1/overview", OverviewRouter);
 app.use("/api/v1/member", memberRouter);
